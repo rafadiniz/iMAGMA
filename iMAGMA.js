@@ -31,7 +31,7 @@ function preload() {
 
 function setup() {
   createCanvas(1280, 720, WEBGL);
-  
+
   frameRate(24);
 
   i = 0;
@@ -54,7 +54,7 @@ function setup() {
   sizef = points.getRowCount();
 
   smooth();
-  
+
   //botões
   button = createButton("MAGMA");
   button.position(width/2, 80);
@@ -63,7 +63,7 @@ function setup() {
   button2 = createButton('M');
   button2.position(width/2+80, 80);
   button2.mousePressed(M);
-  
+
   button3 = createButton('Obl');
   button3.position(width/2+120, 80);
   button3.mousePressed(Obl);
@@ -82,7 +82,7 @@ function draw() {
   //    sizef = points.getRowCount();
   //  }
   //}
-   
+
   //estruturas para gerarem movimento/distorções nos pontos
   th += 0.04;
 
@@ -96,69 +96,71 @@ function draw() {
     amp2 = 0;
     //exit();
   }
-  
+
   //atualizando os pontos
   for (let i = 0; i < sizef; i++) {
     posx[i] += sin(i * 0.13 + th) * amp1;
     posy[i] += cos(i * 0.1 + th) * amp1;
   }
 
-  
+
   //shape vertex
   beginShape();
-  for (let ix = 0; ix < sizef; ix++) {
-    
+  for (let i = 0; i < sizef; i++) {
+
     //interação do mouse com os pontos
     if (mouseIsPressed) {
-      if (dist(posx[ix], posy[ix], (mouseX-width/2)+cos(ix*0.1)*10, (mouseY-height/2)+sin(ix*0.1)*10) < 80) {
-        if (mouseX - width / 2 > posx[ix]) {
-          posx[ix] -= 4;
+      if (dist(posx[i], posy[i], (mouseX-width/2)+cos(i*0.1)*10, (mouseY-height/2)+sin(i*0.1)*10) < 80) {
+        if (mouseX - width / 2 > posx[i]) {
+          posx[i] -= 4;
         } else {
-          posx[ix] += 4;
+          posx[i] += 4;
         }
-        if (mouseY - height / 2 > posy[ix]) {
-          posy[ix] -= 4;
+        if (mouseY - height / 2 > posy[i]) {
+          posy[i] -= 4;
         } else {
-          posy[ix] += 4;
+          posy[i] += 4;
         }
       }
     }
 
     //INTERPOLAÇÃO DE ARRAYS
     //obtendo a diferença e testando
-    if (posx[ix] - posx2[ix] > 0) {
+    if (posx[i] - posx2[i] > 0) {
       //se a diferença for maior que 0 a posição 1 decrementa
-      posx[ix] -= 2.5;
+      posx[i] -= 2.5;
       //quando a posição 1 decresce até a posição 2, permanece nesta
-      if (posx[ix] <= posx2[ix]) {
-        posx[ix] = posx2[ix];
+      if (posx[i] <= posx2[i]) {
+        posx[i] = posx2[i];
       }
     } else {
       //se a diferença for menor que 0 a posição 1 incrementa
-      posx[ix] += 2.3;
+      posx[i] += 2.3;
       //quando a posição 1 alcança a posição 2, permanece nesta
-      if (posx[ix] >= posx2[ix]) {
-        posx[ix] = posx2[ix];
+      if (posx[i] >= posx2[i]) {
+        posx[i] = posx2[i];
       }
     }
-    if (posy[ix] - posy2[ix] > 0) {
-      posy[ix] -= 2.1;
-      if (posy[ix] <= posy2[ix]) {
-        posy[ix] = posy2[ix];
+    if (posy[i] - posy2[i] > 0) {
+      posy[i] -= 2.1;
+      if (posy[i] <= posy2[i]) {
+        posy[i] = posy2[i];
       }
     } else {
-      posy[ix] += 2.7;
-      if (posy[ix] >= posy2[ix]) {
-        posy[ix] = posy2[ix];
+      posy[i] += 2.7;
+      if (posy[i] >= posy2[i]) {
+        posy[i] = posy2[i];
       }
     }
+    
+    //efeitos nos posntos
+    let cx = cos(posx[i]*0.01+ti)*40;
+    let ny = map(noise(posy[i]*0.01+ti), 0, 1, -1, 1)*40;
 
-    fill(127 + tan(posy[ix] * 0.2 + ti) * 127);
-    vertex(posx[ix], posy[ix]);
+    fill(127 + tan(posy[i] * 0.2 + ti) * 127);
+    vertex(posx[i]+cx, posy[i]+ny);
   }
   endShape();
-
-
 }
 
 //ação dos botões: transição entre formas
@@ -178,7 +180,6 @@ function MAGMA() {
 
     i++;
   }
-
 }
 
 function M() {
@@ -197,7 +198,6 @@ function M() {
 
     i++;
   }
-
 }
 
 function Obl() {
@@ -216,5 +216,4 @@ function Obl() {
 
     i++;
   }
-
 }
