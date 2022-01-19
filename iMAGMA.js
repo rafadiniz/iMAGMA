@@ -152,9 +152,9 @@ function draw() {
         posy[i] = posy2[i];
       }
     }
-    
+
     //efeitos nos posntos
-    let cx = cos(posx[i]*0.01+ti)*40;
+    let cx = cos(posx[i]*0.013+ti)*40;
     let ny = map(noise(posy[i]*0.01+ti), 0, 1, -1, 1)*40;
 
     fill(127 + tan(posy[i] * 0.2 + ti) * 127);
