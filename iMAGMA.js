@@ -3,11 +3,17 @@ let points;
 let pointsM;
 let pointsObl;
 
+let move = true;
+let alpha = 150;
+
 let sizel = 0;
 let sizef = 0;
 
 let posx = [];
 let posy = [];
+
+let velx = [];
+let vely = [];
 
 let posx2 = [];
 let posy2 = [];
@@ -43,6 +49,10 @@ function setup() {
     posx[i] = x * 0.6;
     posy[i] = y * 0.6;
 
+    velx[i] = noise(i*0.01)*80;
+    vely[i] = noise(i*0.03)*80;
+
+
     posx2[i] = x * 0.6;
     posy2[i] = y * 0.6;
 
@@ -53,7 +63,6 @@ function setup() {
   sizef = points.getRowCount();
 
   smooth();
-
 }
 
 function draw() {
@@ -83,18 +92,32 @@ function draw() {
     posx[i] += map(noise(i * 0.09), 0, 1, -1, 1) * 3;
     posy[i] += sin(i * 0.13) * 3;
 
-    if (posx[i] < -width/2) {
-      posx[i] = -width/2;
+    if (posx[i] < -width/2.3) {
+      posx[i] = -width/2.3 + noise(i*0.17+th) * 80;
     }
-    if (posx[i] > width/2) {
-      posx[i] = width/2;
+    if (posx[i] > width/2.3) {
+      posx[i] = width/2.3 + noise(i*0.14+th) * 80;
     }
-    if (posy[i] < -height/2) {
-      posy[i] = -height/2;
+    if (posy[i] < -height/3) {
+      posy[i] = -height/3 + sin(i*0.13+th) * 80;
     }
-    if (posy[i] > height/2) {
-      posy[i] = height/2;
+    if (posy[i] > height/3) {
+      posy[i] = height/3 + sin(i*0.17+th) * 80;
     }
+
+    if (mouseIsPressed) {
+      if (dist(posx[i], posy[i], mouseX-width/2, mouseY-height/2) < 20) {
+        move = true;
+      }
+    } else {
+      move = false;
+    }
+
+    //if (dist(posx[i], posy[i], mouseX-width/2, mouseY-height/2) < 120) {
+    //  alpha = 255;
+    //} else {
+    //  alpha = 0;
+    //}
   }
 
 
@@ -120,31 +143,37 @@ function draw() {
     //  }
     //}
 
-    if (mouseIsPressed) {
+   if (mouseX > width/2-450 && mouseX < width/2+450 && mouseY > height/2-120 && mouseY < height/2+120) {
+      alpha = 255;
+    } else {
+      alpha = 0;
+    }
+
+    if (move) {
       //INTERPOLAÇÃO DE ARRAYS
       //obtendo a diferença e testando
       if (posx[i] - posx2[i] > 0) {
         //se a diferença for maior que 0 a posição 1 decrementa
-        posx[i] -= 40.5;
+        posx[i] -= velx[i];
         //quando a posição 1 decresce até a posição 2, permanece nesta
         if (posx[i] <= posx2[i]) {
           posx[i] = posx2[i];
         }
       } else {
         //se a diferença for menor que 0 a posição 1 incrementa
-        posx[i] += 40.3;
+        posx[i] += velx[i];
         //quando a posição 1 alcança a posição 2, permanece nesta
         if (posx[i] >= posx2[i]) {
           posx[i] = posx2[i];
         }
       }
       if (posy[i] - posy2[i] > 0) {
-        posy[i] -= 40.1;
+        posy[i] -= vely[i];
         if (posy[i] <= posy2[i]) {
           posy[i] = posy2[i];
         }
       } else {
-        posy[i] += 40.7;
+        posy[i] += vely[i];
         if (posy[i] >= posy2[i]) {
           posy[i] = posy2[i];
         }
@@ -152,11 +181,12 @@ function draw() {
     }
 
     //efeitos nos posntos
-    //let cx = cos(posx[i]*0.013+ti)*40;
-    //let ny = map(noise(posy[i]*0.01+ti), 0, 1, -1, 1)*40;
+    let cx = cos(posx[i]*0.013+ti)*6;
+    let ny = map(noise(posy[i]*0.01+ti), 0, 1, -1, 1)*6;
 
+    stroke(alpha, 200);
     fill(127 + tan(posy[i] * 0.2 + ti) * 127);
-    vertex(posx[i], posy[i]);
+    vertex(posx[i]+cx, posy[i]+ny);
   }
   endShape();
 }
