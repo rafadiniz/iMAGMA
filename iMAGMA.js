@@ -22,8 +22,6 @@ let th = 0;
 
 let amp2 = 0;
 
-let i;
-
 let ti = 0;
 let tx = 0;
 let ty = 0;
@@ -41,9 +39,8 @@ function setup() {
 
   frameRate(24);
 
-  i = 0;
   //acessando os pontos do .csv
-  while (i < points.getRowCount()) {
+  for (var i = 0; i < points.getRowCount(); i++) {
 
     x = points.get(i, 'x');
     y = points.get(i, 'y');
@@ -57,8 +54,6 @@ function setup() {
 
     posx2[i] = x * 0.6;
     posy2[i] = y * 0.6;
-
-    i++;
   }
 
   //zel = points.getRowCount();
