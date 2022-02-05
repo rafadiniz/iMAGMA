@@ -1,32 +1,27 @@
-//globais
-
 let img;
 
-function preload() {
-  //arquivos .csv
-  points = loadTable("data/pointsMagma.csv", "csv", "header");
-  //pointsM = loadTable("data/pointsM.csv", "csv", "header");
-  //pointsObl = loadTable("data/pointsObl.csv", "csv", "header");
-}
+let i = 0;
+
+let list = 794;
 
 function setup() {
   createCanvas(1280, 720);
-
-
 }
 
 function draw() {
   //background(0);
-  
-  let i = int(map(mouseX,0,width,0,1400));
-  
-  nf(i,5) 
-  
-  //translate(-width/2,-height/2);
-  
-  loadImage('data/MAGMA_nostk/f'+ nf(i,5) +'.png', img => {
-    image(img, 0, 0,1280,720);
-  });
- 
 
+  if (mouseIsPressed) {
+    i = int(map(mouseX, 0, width, 0, list));
+  }else{
+    i++;
+    if(i >= list){
+      i = list;
+    }
+  }
+  
+  loadImage('data/MAGMA_nostk/f'+ nf(i, 5) +'.png', img => {
+    image(img, 0, 0, 1280, 720);
+  }
+  );
 }
