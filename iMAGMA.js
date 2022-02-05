@@ -16,14 +16,14 @@ function draw() {
   
   //loop
   if (free) {
-    i += 4;
+    i++;
     if (i > list) {
       free = false;
     }
   }
   if (!free) {
-    i -= 1;
-    if (i < 600) {
+    i--;
+    if (i < 5) {
       free = true;
     }
   }
